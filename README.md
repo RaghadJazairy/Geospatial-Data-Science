@@ -1,39 +1,144 @@
 # Geospatial-Data-Science
-Raghad J. Data Science Portfolio **Currenlty ongoing projects!** Dec 2025
-## 📂 Targeted Industry Focus
-I am interested in applying my spatial expertise to:
+Raghad J. Data Science Portfolio **Currenlty ongoing projects!** 
 
-**Agriculture (AgTech):** Using multispectral imagery and regression models (XGBoost/Random Forest) to monitor crop health and predict yields.
+**Latest Project June 2026**
+NE Resilience Grid
 
-**Logistics & Tech (e.g., Fuso/Rakuten):** Optimizing supply chains and "last-mile" delivery through spatial clustering, network analysis.
+# ⚡ Northeast Grid Inundation Risk Analysis
 
-**Healthcare & Sustainability:** Analyzing spatial access to medical services and modeling environmental change for habitat conservation.
+> Identifying critical electrical infrastructure vulnerable to coastal flooding using Python, GeoPandas, and live FEMA flood zone data.
 
-**Imagery & Remote Sensing:** Leveraging `Rasterio` and `Deep Learning` to extract features from satellite and aerial data.
 ---
 
-## 📊 Featured Projects
+## 📌 Project Summary
 
-### [Project 1: Agricultural/Environmental Analysis]
-*Predict agricultural productivity (tons/hectare) by identifying non-linear relationships between weather stressors and plant phenology.*
-- **Tools:** Python, Rasterio, Scikit-Learn
-- [**View Project**](link)
+Identified **12 critical electrical substations** across the NYC/New Jersey region at high risk of inundation during a 100-year flood event, using GeoPandas spatial joins against live FEMA flood zone data. Substations were scored by flood zone severity and transmission line count to prioritize engineering attention.
 
-### [Project 2: Healthcare or Urban Accessibility]
-*Brief description (e.g., "Mapped 'pharmacy deserts' to identify gaps in healthcare access").*
-- **Tools:** SQL, PostGIS, QGIS
-- [**View Project**](link)
+**Key Finding:** 3.12% of the NYC/Long Island regional grid's transmission capacity — representing 12 out of 384 total lines — is directly exposed to FEMA-designated Special Flood Hazard Areas, putting it at risk of failure during a single major storm surge event.
 
-### [Project 3: Avian Species Distribution]
-*Brief description (e.g., "Modeling bird migration patterns using climate variables").*
-- **Tools:** Python, GeoPandas, Random Forest
-- [**View Project**](link)
+---
 
-  ### [🔍 Project 4: Surface Anomaly Detection (Industrial Metrology)](link-to-repo)
-**Objective:** Detecting microscopic surface defects in precision optical components using unsupervised deep learning.
-- **X-Factor:** Implemented a **Convolutional Autoencoder** to identify anomalies in 2.5D height-map data with sub-pixel precision.
-- **Tools:** PyTorch, NumPy, OpenCV (Gabor Filtering).
-- - [**View Project**](link)
+## 🗺️ Map Output
+
+![Risk Map](risk_map.png)
+
+*Red dots = at-risk substations inside FEMA flood zones. Grey dots = safe substations. Blue polygons = FEMA Special Flood Hazard Areas (Zone AE).*
+
+---
+
+## 🔍 Top At-Risk Substations
+
+| Name | City | State | Lines | Flood Zone | Risk Score |
+|------|------|-------|-------|------------|------------|
+| KEARNY | Kearny | NJ | 7 | AE | 4.90 |
+| UNKNOWN132612 | Linden | NJ | 3 | AE | 3.70 |
+| UNKNOWN140971 | Jersey City | NJ | 1 | AE | 3.10 |
+| ESSEX | Newark | NJ | 1 | AE | 3.10 |
+| CLAY STREET | Newark | NJ | 0 | AE | 2.80 |
+| UNKNOWN132361 | Hoboken | NJ | 0 | AE | 2.80 |
+
+*Full results in `at_risk_substations.csv`*
+
+---
+
+## 🧠 Methodology
+
+### Data Sources
+- **Infrastructure:** FEMA Homeland Security Infrastructure Program (HSIP) — Electrical Transmission Substations dataset (8,712 substations across 14 Northeast states)
+- **Hazard:** FEMA National Flood Hazard Layer (NFHL) — fetched live via ArcGIS REST API, filtered to Special Flood Hazard Zones: A, AE, AO, AH, VE, V
+
+### Analytical Pipeline
+1. **Filter** — Isolated only active (`IN SERVICE`), true substations from 8,712 total assets
+2. **Clip** — Focused study area on NYC/Long Island bounding box
+3. **Spatial Join** — Used GeoPandas `sjoin` with `predicate='within'` to identify substations inside flood polygons
+4. **Risk Scoring** — Custom composite score weighted 70% flood zone severity + 30% transmission line count
+
+### Risk Score Formula
+```
+RISK_SCORE = (ZONE_SCORE × 0.7) + (LINE_SCORE × 0.3)
+```
+
+| Flood Zone | Severity Score |
+|------------|---------------|
+| VE / V | 5 (Coastal high-velocity) |
+| AE | 4 (High-risk, detailed study) |
+| A / AO | 3 (High-risk, approximate) |
+| AH | 2 (Shallow flooding) |
+
+---
+
+## 📊 Grid Impact Summary
+
+```
+Total transmission lines in NYC/LI region:       384
+Transmission lines exposed to flood zones:         12
+Percentage of regional grid capacity at risk:   3.12%
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Tool | Purpose |
+|------|---------|
+| Python 3 | Core language |
+| GeoPandas | Spatial data loading and joins |
+| Shapely | Geometry operations |
+| Pandas | Data manipulation and export |
+| Matplotlib | Map visualization |
+| Requests | Live FEMA API data fetching |
+
+---
+
+## 🚀 How to Run
+
+**1. Clone the repo**
+```bash
+git clone https://github.com/YOUR_USERNAME/grid-resilience-analysis.git
+cd grid-resilience-analysis
+```
+
+**2. Install dependencies**
+```bash
+pip install geopandas pandas matplotlib shapely requests
+```
+
+**3. Run the analysis**
+```bash
+python analysis.py
+```
+
+**Outputs:**
+- `at_risk_substations.csv` — ranked table of vulnerable substations
+- `risk_map.png` — spatial map of results
+
+## 📁 Project Structure
+
+```
+grid-resilience-analysis/
+├── analysis.py                                        # Main Python script
+├── Electrical_Transmission_Substations_(HSIP).geojson # Source data
+├── at_risk_substations.csv                            # Output: results table
+├── risk_map.png                                       # Output: map
+└── README.md
+```
+
+---
+
+## 💡 Real-World Context
+
+The substations flagged by this analysis are focused in the Newark/Jersey City/Hoboken corridor which is the exact area that suffered severe grid failures during **Hurricane Sandy (2012)**, which caused over $65 billion in damage and left millions without power. This analysis provides a repeatable, data framework for prioritizing flood hardening investments across the Northeast grid.
+
+---
+
+## 🔭 Future Work
+
+- Expand bounding box to cover full Northeast coastline (MA, MD, VA)
+- Integrate NOAA SLOSH storm surge model for hurricane-specific scenarios
+- Add interactive HTML map using Folium for web-based stakeholder reporting
+- Cross-reference with population density data to quantify people-at-risk per substation
+
+
 
 ---
 
