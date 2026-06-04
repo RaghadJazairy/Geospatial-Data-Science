@@ -58,12 +58,26 @@ Identified **12 critical electrical substations** across the NYC/New Jersey regi
 RISK_SCORE = (ZONE_SCORE × 0.7) + (LINE_SCORE × 0.3)
 ```
 
-| Flood Zone | Severity Score |
-|------------|---------------|
-| VE / V | 5 (Coastal high-velocity) |
-| AE | 4 (High-risk, detailed study) |
-| A / AO | 3 (High-risk, approximate) |
-| AH | 2 (Shallow flooding) |
+Risk Score Range: 0 (no risk) → 5.0 (maximum risk)
+
+Breakdown:
+- A substation in Zone VE with 10+ lines = highest possible score (~5.0)
+- A substation in Zone AE with 0 lines  = lowest at-risk score (2.8)
+- Anything below 2.8 = outside flood zones = not flagged
+
+| Risk Score | Risk Level | Meaning |
+|------------|------------|---------|
+| 4.5 – 5.0  | 🔴 Critical | High-voltage, coastal flood zone |
+| 3.5 – 4.4  | 🟠 High     | Multiple lines in flood zone |
+| 2.8 – 3.4  | 🟡 Moderate | Active substation in flood zone |
+| 0 – 2.7    | 🟢 Safe     | Outside flood zones |
+
+| Flood Zone | Severity Score | Description |
+|------------|---------------|-------------|
+| VE / V | 5 | Coastal high-velocity wave action |
+| AE | 4 | High-risk, detailed flood study |
+| A / AO | 3 | High-risk, approximate boundary |
+| AH | 2 | Shallow flooding risk |
 
 ---
 
