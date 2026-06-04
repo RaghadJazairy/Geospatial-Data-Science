@@ -47,7 +47,7 @@ Identified **12 critical electrical substations** across the NYC/New Jersey regi
 - **Infrastructure:** FEMA Homeland Security Infrastructure Program (HSIP) — Electrical Transmission Substations dataset (8,712 substations across 14 Northeast states)
 - **Hazard:** FEMA National Flood Hazard Layer (NFHL) — fetched live via ArcGIS REST API, filtered to Special Flood Hazard Zones: A, AE, AO, AH, VE, V
 
-### Analytical Pipeline
+### Step by Step Process
 1. **Filter** — Isolated only active (`IN SERVICE`), true substations from 8,712 total assets
 2. **Clip** — Focused study area on NYC/Long Island bounding box
 3. **Spatial Join** — Used GeoPandas `sjoin` with `predicate='within'` to identify substations inside flood polygons
