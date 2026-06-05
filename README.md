@@ -37,6 +37,8 @@ Identified **12 critical electrical substations** across the NYC/New Jersey regi
 | CLAY STREET | Newark | NJ | 0 | AE | 2.80 |
 | UNKNOWN132361 | Hoboken | NJ | 0 | AE | 2.80 |
 
+*Please note some substations appear as **UNKNOWN** in the source data, due to gaps in the FEMA HSIP dataset rather than errors in the analysis or unamed locations*
+
 *Full results in `at_risk_substations.csv`*
 
 ---
